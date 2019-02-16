@@ -1,11 +1,13 @@
-import { generateNote, generateNoteOtherThan } from './NoteGenerator'
+import { generateNoteOtherThan, createNoteGenerator } from './NoteGenerator'
 
 test("Returns the right note for a given seed", () => {
-    let noteGen = generateNote(0.5)(['c'])
-    expect(noteGen(0.4)).toBe('c')
+    // let noteGen = createNoteGenerator(0.5, ['c'])
+    let noteGen = createNoteGenerator({density: 0.5, range: ['c']})
+
+    expect(noteGen(0.2)).toBe('c')
     expect(noteGen(0.9)).toBe('z')
 
-    noteGen = generateNote(0.8)(['a', 'b'])
+    noteGen = createNoteGenerator({density: 0.8, range: ['a', 'b']})
     expect(noteGen(0.3)).toBe('a')
     expect(noteGen(0.6)).toBe('b')
 })
