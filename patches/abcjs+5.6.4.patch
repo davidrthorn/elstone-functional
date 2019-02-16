@@ -1,0 +1,13 @@
+diff --git a/node_modules/abcjs/src/parse/abc_parse.js b/node_modules/abcjs/src/parse/abc_parse.js
+index 970c579..bf7a2ff 100644
+--- a/node_modules/abcjs/src/parse/abc_parse.js
++++ b/node_modules/abcjs/src/parse/abc_parse.js
+@@ -1294,7 +1294,7 @@ var Parse = function() {
+ 								warn("Can't nest triplets", line, i);
+ 							else {
+ 								el.startTriplet = ret.triplet;
+-								el.tripletMultiplier = ret.tripletQ / ret.triplet;
++								el.tripletMultiplier = ret.tripletQ / ret.triplet -0.25;
+ 								tripletNotesLeft = ret.num_notes === undefined ? ret.triplet : ret.num_notes;
+ 							}
+ 						}
