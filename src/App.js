@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import abc from 'abcjs'
-import { createNoteGenerator } from './modules/sequence/NoteGenerator/NoteGenerator'
+import { createNoteGenerator, generateNoteOtherThan } from './modules/sequence/NoteGenerator/NoteGenerator'
 import SequenceGenerator from './modules/sequence/SequenceGenerator/SequenceGenerator'
 import SequenceCombiner from './modules/sequence/SequenceCombiner/SequenceCombiner'
 import AbcInterpreter from './modules/abc_interpreter/Interpreter/Interpreter'
@@ -11,16 +11,16 @@ class App extends Component {
 
   componentDidMount() {
 
-    const noteGenerator = createNoteGenerator({density: 0.8, range: ['c', 'D']})
+    const noteGenerator = createNoteGenerator({density: 1, range: ['c', 'D', 'e', 'F']})
     let config = {
       length: 24,
       maxConsecutive: 2,
-      noteGenerator: noteGenerator,
+
     }
 
-    let sg = new SequenceGenerator(config)
+    let sg = new SequenceGenerator(config, noteGenerator, generateNoteOtherThan)
     const s1 = sg.generate()
-    
+
     const combiner = new SequenceCombiner()
     const sequence = combiner.combine([s1])
     const interpreter = new AbcInterpreter()

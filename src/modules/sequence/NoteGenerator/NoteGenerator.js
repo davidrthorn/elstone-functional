@@ -8,7 +8,7 @@ const generateNote = density => range => rand =>
 const normalizeDensity = density => density ** 2
 
 export const generateNoteOtherThan = (note, randomizer, genNote, attempts) => {
-    let newNote = genNote(randomizer)
+    let newNote = genNote(randomizer())
     return attempts < 1
         ? 'z'
         : newNote !== note
