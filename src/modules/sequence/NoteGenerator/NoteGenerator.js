@@ -1,19 +1,18 @@
-const getByDecimalIndex = (arr, decimal) => arr[Math.floor(decimal * arr.length)]
-
-const generateNote = density => range => rand =>
-    rand > normalizeDensity(density)
+export const generateNote = density => range => random =>
+    random > normalizeDensity(density)
         ? 'z'
-        : getByDecimalIndex(range, (rand / density))
+        : getByDecimalIndex(range, (random / density))
 
-const normalizeDensity = density => density ** 2
-
-export const generateNoteOtherThan = (note, randomizer, genNote, attempts) => {
-    let newNote = genNote(randomizer())
-    return attempts < 1
-        ? 'z'
-        : newNote !== note
-            ? newNote
-            : generateNoteOtherThan(newNote, randomizer, genNote, attempts - 1)
+export const generateNoteOtherThan = (note, genNote, random, attempts=10) => {
+    if (attempts < 1) return 'z'
+    let newNote = genNote(modulate(random))
+    return newNote !== note
+        ? newNote
+        : generateNoteOtherThan(note, genNote, random + 2, attempts - 1)
 }
 
-export const createNoteGenerator = ({density=0.5, range=['c']}={}) => generateNote(density)(range)
+const modulate = random => random ** 2 % 1
+
+const getByDecimalIndex = (arr, decimal) => arr[Math.floor(decimal * arr.length)]
+
+const normalizeDensity = density => density ** 2

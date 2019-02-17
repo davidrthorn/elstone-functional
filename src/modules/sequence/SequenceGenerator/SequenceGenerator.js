@@ -1,17 +1,15 @@
-import { createNoteGenerator} from '../NoteGenerator/NoteGenerator'
+import { generateNoteOtherThan, generateNote } from '../NoteGenerator/NoteGenerator'
 
-const noteGen = createNoteGenerator({density: 1, range: ['c', 'D']})
+const noteGen = generateNote(1)(['c', 'D'])
 
-const exceedsMaxConsecutive = (total, maxC) =>
-    total.length >= maxC
-    && total
-        .substring(-maxC)
-        .match(/([a-g])\1+$/i)
+export const exceedsMaxConsecutive = (total, maxConsecutive) =>
+    total.match(new RegExp(`([a-gz])\\1{${maxConsecutive - 1},}$`, 'i')) != null
 
-export const testGen = (maxConsecutive=3) => randoms => randoms.reduce((total, curr) =>
-    total + (
+export const generateSequence = (maxConsecutive=3) => randoms => randoms.reduce((total, curr, i) => {
+    console.log(exceedsMaxConsecutive(total, maxConsecutive) + ' ' + generateNoteOtherThan(noteGen(curr), noteGen, curr) + ' ' + total)
+    return total + (
         exceedsMaxConsecutive(total, maxConsecutive)
-            ? 'z'
+            ? generateNoteOtherThan(noteGen(curr), noteGen, curr)
             : noteGen(curr)
         )
-, '')
+}, '')
