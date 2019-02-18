@@ -1,23 +1,16 @@
+import * as NG from '../NoteGenerator/NoteGenerator'
 import { generateSequence, exceedsMaxConsecutive } from './SequenceGenerator'
 
 test('Returns a sequence containing no more than the specified maximum consecutive notes', () => {
-    const randArray = Array(8)
-        .fill(0)
-        .map(Math.random)
+    const random = Array(8).fill(0.4)
+    const noteGen = NG.generateNote(1)(['c', 'D'])
 
-    console.log(randArray)
-    console.log(generateSequence(3)(randArray))
-
-    expect(1).toBe(2)
-
-    // const sg = new SequenceGenerator({length: 16, maxConsecutive: 3}, MockNoteGenerator, MockNoteOtherThan)
-    // expect(sg.generate()).toBe('ccczccczccczcccz')
+    expect(generateSequence(noteGen)(3)(random)).toBe('cccDcccD')
 })
 
 test('Returns true if sequence ends with 3 consecutive notes', () => {
     expect(exceedsMaxConsecutive('cccc', 3)).toBe(true)
-    expect(exceedsMaxConsecutive('Dccc', 3)).toBe(true)
-    expect(exceedsMaxConsecutive('Dccc', 3)).toBe(true)
+    expect(exceedsMaxConsecutive('Dcccc', 3)).toBe(true)
 })
 
 test('Returns false if sequence does not end with 3 consecutive notes ', () => {
