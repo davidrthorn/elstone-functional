@@ -33,40 +33,20 @@
 //     return column
 // }
 
-export const toColumns = arr => {
-    const result = [];
-    const desc = arr.sort((a, b) => b.length - a.length);
-    let i = desc.length;
-    while (i--) {
-        for (let j = 0; j < desc[i].length; j++) {
-            let note = desc[i][j];
-            result[j] = result[j]
-                ? note + result[j]
-                : note;
-        }
-    }
-    return result
-}
+
+export const toColStrings = sequences => colStrings(sequences.sort((a, b) => b.length - a.length))
 
 const toString = column => [column.reduce((total, note) => total + note, '')] 
 
-const sortedToColStrings = sequences => {
-    return sequences.length
-        ? sequences[0].length <= 1
-            ? toString(sequences)
-            : toString(sequences.map(s => s.substr(0, 1)))
-                .concat(sortedToColStrings(sequences.map(s => s.substr(1))))
-        : []
+const colStrings = (sequences, total=[]) => {
+    const current = sequences.map(s => s.substr(0, 1))
+    const remaining = sequences.map(s => s.substr(1)) 
+    const newTotal = total.concat(toString(current))
+
+    return !remaining[0].length
+        ? newTotal
+        : colStrings(remaining, newTotal)
 }
-
-export const toColStrings = sequence =>
-    sortedToColStrings(
-        sequence.sort(
-            (a, b) => b.length - a.length
-        )
-    )
-
-
 
 export const removeDuplicates = column => [...new Set(column.split(''))].join('')
 

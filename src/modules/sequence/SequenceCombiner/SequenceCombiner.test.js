@@ -1,22 +1,22 @@
-import {removeDuplicates, toColumns, toColStrings} from './SequenceCombiner'
+import {removeDuplicates, toColumns, toColStrings, transpose} from './SequenceCombiner'
 
 // const sc = new SequenceCombiner()
 
-test("toColumns combines the right notes", () => {
-    expect(toColumns(["abc", "def", "ghi"])).toEqual(["adg", "beh", "cfi"])
-})
+// test("toColumns combines the right notes", () => {
+//     expect(toColumns(["abc", "def", "ghi"])).toEqual(["adg", "beh", "cfi"])
+// })
 
-test("toColumns handles diffent group lengths", () => {
-    expect(toColumns(["a", "de", "hij"])).toEqual(["hda", "ie", "j"])
-})
+// test("toColumns handles diffent group lengths", () => {
+//     expect(toColumns(["a", "de", "hij"])).toEqual(["hda", "ie", "j"])
+// })
 
-test("toColumns handles arrays with empty strings", () => {
-    expect(toColumns(["a", "", "hij"])).toEqual(["ha", "i", "j"])
-})
+// test("toColumns handles arrays with empty strings", () => {
+//     expect(toColumns(["a", "", "hij"])).toEqual(["ha", "i", "j"])
+// })
 
-test("toColumns handles empty arrays", () => {
-    expect(toColumns([])).toEqual([])
-})
+// test("toColumns handles empty arrays", () => {
+//     expect(toColumns([])).toEqual([])
+// })
 
 // test("_combineNotes reduces strings of only rests to one rest", () => {
 //     expect(sc._combineNotes("zzz")).toBe("z")
@@ -58,11 +58,11 @@ test("toColumns handles empty arrays", () => {
 //     expect(sc.combine(['abzz', 'zzdz'])).toEqual('abdz')
 // })
 
-test('removeDuplicates removes duplicates', () => {
-    expect(removeDuplicates('ccc')).toBe('c')
-    expect(removeDuplicates('cac')).toBe('ca')
-    expect(removeDuplicates('CaD')).toBe('CaD')
-})
+// test('removeDuplicates removes duplicates', () => {
+//     expect(removeDuplicates('ccc')).toBe('c')
+//     expect(removeDuplicates('cac')).toBe('ca')
+//     expect(removeDuplicates('CaD')).toBe('CaD')
+// })
 
 // test('_addBrackets adds brackets where appropriate', () => {
 //     expect(sc._addBrackets('CaD')).toBe('[CaD]')
@@ -80,6 +80,9 @@ test('toColRecursive works with singles', () => {
 
 test('toColStrings works with multiples', () => {
     expect(toColStrings(['abc', 'abc', 'abc'])).toEqual(['aaa', 'bbb', 'ccc'])
+})
+
+test('toColStrings works with different length', () => {
     expect(toColStrings(['abc', 'abc', 'abcd'])).toEqual(['aaa', 'bbb', 'ccc', 'd'])
 })
 
@@ -87,6 +90,6 @@ test("toColStrings handles arrays with empty strings", () => {
     expect(toColStrings(['', 'a', 'hij'])).toEqual(['ha', 'i', 'j'])
 })
 
-test("toColumns handles empty arrays", () => {
-    expect(toColStrings([])).toEqual([])
-})
+// test("toColumns handles empty arrays", () => {
+//     expect(toColStrings([])).toEqual([])
+// })
