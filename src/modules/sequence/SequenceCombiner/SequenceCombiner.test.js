@@ -1,95 +1,31 @@
-import {removeDuplicates, toColumns, toColStrings, transpose} from './SequenceCombiner'
+import { transpose, removeDuplicates, combineSequences } from './SequenceCombiner'
 
-// const sc = new SequenceCombiner()
+test("transpose", () => {
+    const input = [
+        ['a', 'b', 'c', 'd'],
+        ['a', 'b', 'c'],
+        ['a', 'b', 'c'],
+        ['a', 'b', 'c'],
+        ['a', 'b', 'c'],
+    ]
 
-// test("toColumns combines the right notes", () => {
-//     expect(toColumns(["abc", "def", "ghi"])).toEqual(["adg", "beh", "cfi"])
-// })
+    const want = [
+        ['a', 'a', 'a', 'a', 'a'],
+        ['b', 'b', 'b', 'b', 'b'],
+        ['c', 'c', 'c', 'c', 'c'],
+        ['d'],
+    ]
 
-// test("toColumns handles diffent group lengths", () => {
-//     expect(toColumns(["a", "de", "hij"])).toEqual(["hda", "ie", "j"])
-// })
-
-// test("toColumns handles arrays with empty strings", () => {
-//     expect(toColumns(["a", "", "hij"])).toEqual(["ha", "i", "j"])
-// })
-
-// test("toColumns handles empty arrays", () => {
-//     expect(toColumns([])).toEqual([])
-// })
-
-// test("_combineNotes reduces strings of only rests to one rest", () => {
-//     expect(sc._combineNotes("zzz")).toBe("z")
-// })
-
-// test("_combineNotes throws an error when invalid characters are supplied", () => {
-//     expect(() => {
-//         sc._combineNotes("zxz")
-//     }).toThrowError("Unsupported characters: 'x'")
-//     expect(() => {
-//         sc._combineNotes("z z")
-//     }).toThrowError("Unsupported characters: ' '")
-//     expect(() => {
-//         sc._combineNotes("Ab y")
-//     }).toThrowError("Unsupported characters: ' ', 'y'")
-// })
-
-// test("_combineNotes adds brackets in the right way", () => {
-//     expect(sc._combineNotes("ab")).toBe("[ab]")
-//     expect(sc._combineNotes("Ab")).toBe("[Ab]")
-//     expect(sc._combineNotes("zb")).toBe("b")
-//     expect(sc._combineNotes("bcD")).toBe("[Dbc]")
-// })
-
-// test("_combineNotes removes copies of the same note", () => {
-//     expect(sc._combineNotes("ccz")).toBe("c")
-// })
-
-// test("_combineNotes returns empty string for empty string", () => {
-//     expect(sc._combineNotes("")).toBe("")
-// })
-
-// test("combine returns empty string when supplied with empty array", () => {
-//     expect(sc.combine([])).toEqual('')
-// })
-
-// test("combine correctly combines sequences", () => {
-//     expect(sc.combine(['abcz', 'dzdz', 'zzzz', 'ccc'])).toEqual('[acd][bc][cd]z')
-//     expect(sc.combine(['abzz', 'zzdz'])).toEqual('abdz')
-// })
-
-// test('removeDuplicates removes duplicates', () => {
-//     expect(removeDuplicates('ccc')).toBe('c')
-//     expect(removeDuplicates('cac')).toBe('ca')
-//     expect(removeDuplicates('CaD')).toBe('CaD')
-// })
-
-// test('_addBrackets adds brackets where appropriate', () => {
-//     expect(sc._addBrackets('CaD')).toBe('[CaD]')
-//     expect(sc._addBrackets('')).toBe('')
-//     expect(sc._addBrackets('c')).toBe('c')
-// })
-
-// test('_removeRests removes rests', () => {
-//     expect(sc._removeRests('czcz')).toBe('cc')
-// })
-
-test('toColRecursive works with singles', () => {
-    expect(toColStrings(['a', 'a', 'a'])).toEqual(['aaa'])
+    expect(transpose(input)).toEqual(want)
 })
 
-test('toColStrings works with multiples', () => {
-    expect(toColStrings(['abc', 'abc', 'abc'])).toEqual(['aaa', 'bbb', 'ccc'])
+test("removeDuplicates", () => {
+    expect(removeDuplicates(['a', 'a', 'b', 'b', 'c', 'd'])).toEqual(['a', 'b', 'c', 'd'])
+    expect(removeDuplicates(['a', '', '', ' ', ' ', 'd'])).toEqual(['a', '', ' ', 'd'])
+    expect(removeDuplicates([])).toEqual([])
 })
 
-test('toColStrings works with different length', () => {
-    expect(toColStrings(['abc', 'abc', 'abcd'])).toEqual(['aaa', 'bbb', 'ccc', 'd'])
+test("combine correctly combines sequences", () => {
+    expect(combineSequences(['abcz', 'dzdz', 'zzzz', 'ccc'])).toEqual('[acd][bc][cd]z')
+    expect(combineSequences(['abzz', 'zzdz'])).toEqual('abdz')
 })
-
-test("toColStrings handles arrays with empty strings", () => {
-    expect(toColStrings(['', 'a', 'hij'])).toEqual(['ha', 'i', 'j'])
-})
-
-// test("toColumns handles empty arrays", () => {
-//     expect(toColStrings([])).toEqual([])
-// })

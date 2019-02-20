@@ -1,55 +1,43 @@
-// export const combineSeqeunces = sequences => {
-//     let result = ''
-//     const s = sequences.slice()
-//     const columns = toColumns(s)
+// Convert an array of sequences to a matrix
+const toMatrix = sequences => sequences.map(s => s.split(''))
 
-//     while (columns.length) {
-//         result += combineNotes(
-//             columns.shift()
-//         )
-//     }
-//     return result
-// }
+const sortByRowLengthDesc = matrix => matrix.sort((a, b) => b.length - a.length)
 
-// const combineNotes = column => {
-//     column = column.split('').sort().join('')
+export const transpose = s =>
+    s[0].map((note, i) =>
+        s.map((row, j) => 
+            row[i])
+                .filter(a => a !== undefined))
 
-//     const invalids = column.match(/[^a-gz]/gi)
-//     if (invalids) {
-//         const list = invalids
-//             .map(i => "'" + i + "'")
-//             .join(', ')
-//         throw new Error('Unsupported characters: ' + list)
-//     }
+export const removeDuplicates = sequence =>
+    sequence.filter((note, i, arr) => !(arr.indexOf(note) > -1 && arr.indexOf(note) < i))
 
-//     if (column.search(/[a-g]+/gi) === -1) {
-//         return column.slice(-1)
-//     }
+const removeRests = sequence =>
+    sequence.filter((note, i, s) => !((note === 'z' || note === ' ') && s.length > 1))
 
-//     column = removeRests(column)
-//     column = removeDuplicates(column)
-//     column = addBrackets(column)
+const addBrackets = sequence =>
+    sequence.length > 1
+        ? ['['].concat(sequence, [']'])
+        : sequence
 
-//     return column
-// }
+const processCols = cols => cols.map(
+    c => {
+        let output = removeDuplicates(c)
+        output = output.sort()
+        output = removeRests(output)
+        output = addBrackets(output)
+        output = output.join('')
 
+        return output
+    }
+)
 
-export const toColStrings = sequences => colStrings(sequences.sort((a, b) => b.length - a.length))
+export const combineSequences = sequences => {
+    let output = toMatrix(sequences)
+    output = sortByRowLengthDesc(output)
+    output = transpose(output)
+    output = processCols(output)
+    output = output.join('')
 
-const toString = column => [column.reduce((total, note) => total + note, '')] 
-
-const colStrings = (sequences, total=[]) => {
-    const current = sequences.map(s => s.substr(0, 1))
-    const remaining = sequences.map(s => s.substr(1)) 
-    const newTotal = total.concat(toString(current))
-
-    return !remaining[0].length
-        ? newTotal
-        : colStrings(remaining, newTotal)
+    return output
 }
-
-export const removeDuplicates = column => [...new Set(column.split(''))].join('')
-
-const addBrackets = column => column.replace(/[a-g]{2,}/gi, '[$&]')
-
-const removeRests = column => column.replace(/z/gi, '')
