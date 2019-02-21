@@ -1,4 +1,4 @@
-import { transpose, removeDuplicates, combineSequences } from './SequenceCombiner'
+import {transpose, removeDuplicates, combineSequences} from './SequenceCombiner'
 
 test("transpose", () => {
     const input = [

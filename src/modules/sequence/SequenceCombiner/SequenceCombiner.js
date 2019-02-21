@@ -1,16 +1,7 @@
+import * as morpheus from '../../morpheus/morpheus'
+
 // Convert an array of sequences to a matrix
-const toMatrix = sequences => sequences.map(s => s.split(''))
-
-const sortByRowLengthDesc = matrix => matrix.sort((a, b) => b.length - a.length)
-
-export const transpose = s =>
-    s[0].map((note, i) =>
-        s.map((row, j) => 
-            row[i])
-                .filter(a => a !== undefined))
-
-export const removeDuplicates = sequence =>
-    sequence.filter((note, i, arr) => !(arr.indexOf(note) > -1 && arr.indexOf(note) < i))
+export const removeDuplicates = sequence => [...new Set(sequence)]
 
 const removeRests = sequence =>
     sequence.filter((note, i, s) => !((note === 'z' || note === ' ') && s.length > 1))
@@ -33,9 +24,9 @@ const processCols = cols => cols.map(
 )
 
 export const combineSequences = sequences => {
-    let output = toMatrix(sequences)
-    output = sortByRowLengthDesc(output)
-    output = transpose(output)
+    let output = morpheus.toMatrix(sequences)
+    output = morpheus.sortByRowLength(output)
+    output = morpheus.transpose(output)
     output = processCols(output)
     output = output.join('')
 
