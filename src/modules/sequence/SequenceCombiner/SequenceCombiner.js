@@ -24,7 +24,7 @@ const processCols = cols => cols.map(
 )
 
 export const combineSequences = sequences => {
-    let output = morpheus.toMatrix(sequences)
+    let output = morpheus.strArrToMatrix(sequences)
     output = morpheus.sortByRowLength(output)
     output = morpheus.transpose(output)
     output = processCols(output)

@@ -1,23 +1,4 @@
-import {transpose, removeDuplicates, combineSequences} from './SequenceCombiner'
-
-test("transpose", () => {
-    const input = [
-        ['a', 'b', 'c', 'd'],
-        ['a', 'b', 'c'],
-        ['a', 'b', 'c'],
-        ['a', 'b', 'c'],
-        ['a', 'b', 'c'],
-    ]
-
-    const want = [
-        ['a', 'a', 'a', 'a', 'a'],
-        ['b', 'b', 'b', 'b', 'b'],
-        ['c', 'c', 'c', 'c', 'c'],
-        ['d'],
-    ]
-
-    expect(transpose(input)).toEqual(want)
-})
+import { removeDuplicates, combineSequences } from './SequenceCombiner'
 
 test("removeDuplicates", () => {
     expect(removeDuplicates(['a', 'a', 'b', 'b', 'c', 'd'])).toEqual(['a', 'b', 'c', 'd'])
