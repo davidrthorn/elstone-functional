@@ -1,34 +1,32 @@
-import * as morpheus from '../morpheus/morpheus'
+import * as R from 'ramda'
 
-// Convert an array of sequences to a matrix
-export const removeDuplicates = sequence => [...new Set(sequence)]
+const removeRests = col => {
+  return R.equals(col, ['z'])
+    ? col
+    : R.without('z', col)
+}
 
-const removeRests = sequence =>
-  sequence.filter((note, i, s) => !((note === 'z' || note === ' ') && s.length > 1))
+const strArrToMatrix = (arr, sep = '') => arr.map(row => row.split(sep))
 
-const addBrackets = sequence =>
-  sequence.length > 1
-    ? ['['].concat(sequence, [']'])
-    : sequence
+const addBrackets = col =>
+  col.length > 1
+    ? R.reduce(R.concat, [], [['['], col, [']']])
+    : col
 
-const processCols = cols => cols.map(
-  col => {
-    let output = removeDuplicates(col)
-    output = output.sort()
-    output = removeRests(output)
-    output = addBrackets(output)
-    output = output.join('')
-
-    return output
-  }
+const processCol = R.pipe(
+  R.uniq,
+  removeRests,
+  addBrackets,
+  R.join('')
 )
 
-export const combineSequences = sequences => {
-  let output = morpheus.strArrToMatrix(sequences)
-  output = morpheus.sortByRowLength(output)
-  output = morpheus.transpose(output)
-  output = processCols(output)
-  output = output.join('')
+const processCols = cols => cols.map(processCol)
 
-  return output
-}
+const combineSequences = R.pipe(
+  strArrToMatrix,
+  R.transpose,
+  processCols,
+  R.join('')
+)
+
+export default combineSequences
