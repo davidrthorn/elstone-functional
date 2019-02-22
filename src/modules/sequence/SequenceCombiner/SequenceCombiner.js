@@ -12,8 +12,8 @@ const addBrackets = sequence =>
         : sequence
 
 const processCols = cols => cols.map(
-    c => {
-        let output = removeDuplicates(c)
+    col => {
+        let output = removeDuplicates(col)
         output = output.sort()
         output = removeRests(output)
         output = addBrackets(output)

@@ -1,86 +1,38 @@
-export default class Interpreter {
-    constructor (swung=false) {
-        this.swung = swung
-    }
+import R from 'ramda'
 
-    interpretSequence = (sequence, groupLength) => {
-        sequence = this._sequenceToGroups(sequence, groupLength)
-        sequence = this._applyFunctionToGroups(sequence, this._addNoteValuesToGroup)
-        sequence = this._applyFunctionToGroups(sequence, this._addTripletBracketsToGroup)
-        sequence = this._groupsToBars(sequence)
-        return sequence
-    }
+const toGroups = R.curry((groupLength, sequence) => sequence.match(new RegExp(`((?:\\[\\w+\\])|(?:\\w)){${groupLength}}`, 'gi')) || '')
 
-    _sequenceToGroups = (sequence, groupLength) => {
-        let result = ''
-        const cols = this._groupToColumns(sequence)
+const addTripletEigths = group =>
+  len(group) === 3
+    ? group.replace(/([a-g]|\])z(\[|[a-g])/i, '$1$2')
+    : group
 
-        for (let i = 0; i < cols.length; i++) {
-            if (i && i % groupLength === 0) {
-                result += ' '
-            }
-            result += cols[i]
-        }
-        return result
-    }
+const addTripletBrackets = group => group.replace(/^(\w(?:[a-g]z|[a-g]{2}))$/i, '(3$&')
 
-    _groupToColumns = sequence => sequence.match(/(\[[a-g]+\]|[a-gxz])/gi) || []
+const addNoteValues = group => group.replace(/^(.+)zz$/i, '$12')
 
-    _addNoteValuesToGroup = group => {
-        const notes = this._groupToColumns(group)
-        if (notes[1] === 'z') {
-            if (notes[2] === 'z') {
-                return notes[0] + '2'
-            }
-            return notes[0] + notes[2]
-        }
-        return group
-    }
+const processGroup = R.pipe(
+  addTripletBrackets,
+  addTripletEigths,
+  addNoteValues
+)
 
-    _applyFunctionToGroups = (sequence, f) => {
-        return sequence
-            .split(' ')
-            .map(group => f(group))
-            .join(' ')
-    }
+const processGroups = groups => groups.map(group => processGroup(group))
 
-    _addTripletBracketsToGroup = group => {
-        const notes = this._groupToColumns(group)
-        if (!notes || notes.length !== 3) {
-            return group
-        }
-        
-        const patterns = ['nnz', 'znn', 'znz', 'nnn']
-        let groupPattern = ''
-        notes.forEach(n => {
-            groupPattern += n === 'z'
-                ? 'z'
-                : 'n'
-        })
+const addBarSeparators = R.curry((perBar, sequence) => {
+  let matches = sequence.match(new RegExp(`((?:[^ ]+ ){${perBar}})`))
+  return matches
+    ? matches
+      .reduce((total, current) => total + '| ' + current)
+      .trim()
+    : sequence
+})
 
-        return patterns.includes(groupPattern)
-            ? '(3' + group
-            : group
-    }
+const len = group => group.match(/(\[\w+\]|\w)/gi).length
 
-    _groupsToBars = sequence => {
-        const groups = sequence.split(' ')
-        let newGroups = []
-        const danglingGroups = groups.length % 4
-        
-        groups.forEach((group, i) => {
-            let atBarBreak = i && i % 4 === 0
-            if (atBarBreak) {
-                newGroups.push('|')
-            }
-            newGroups.push(group)
-        })
-
-        if (danglingGroups) {
-            const restValue = String(2 * (4 - danglingGroups))
-            newGroups.push('z' + restValue)
-        }
-
-        return newGroups.join(' ')
-    }
+export const interpret = (groupLength, groupsPerBar, sequence) => {
+  let groups = toGroups(groupLength, sequence)
+  groups = processGroups(groups)
+  groups = groups.join(' ')
+  return addBarSeparators(groupsPerBar, groups)
 }

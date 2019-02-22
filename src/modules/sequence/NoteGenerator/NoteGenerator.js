@@ -1,14 +1,14 @@
 export const generateNote = density => range => random =>
-    random > normalizeDensity(density)
-        ? 'z'
-        : getByDecimalIndex(range, (random / density))
+  random > normalizeDensity(density)
+    ? 'z'
+    : getByDecimalIndex(range, (random / density))
 
-export const generateNoteOtherThan = (note, genNote, random, attempts=10) => {
-    if (attempts < 1) return 'z'
-    let newNote = genNote(modulate(random))
-    return newNote !== note
-        ? newNote
-        : generateNoteOtherThan(note, genNote, random + 2, attempts - 1)
+export const generateNoteOtherThan = (note, genNote, random, attempts = 10) => {
+  if (attempts < 1) return 'z'
+  let newNote = genNote(modulate(random))
+  return newNote !== note
+    ? newNote
+    : generateNoteOtherThan(note, genNote, random + 2, attempts - 1)
 }
 
 const modulate = random => random ** 2 % 1
