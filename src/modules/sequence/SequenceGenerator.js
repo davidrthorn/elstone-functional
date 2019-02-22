@@ -1,4 +1,4 @@
-import { generateNoteOtherThan } from '../NoteGenerator/NoteGenerator'
+import { generateNoteOtherThan } from './NoteGenerator'
 
 export const exceedsMaxConsecutive = (total, maxConsecutive) =>
   total.match(new RegExp(`([a-gz])\\1{${maxConsecutive},}$`, 'i')) != null

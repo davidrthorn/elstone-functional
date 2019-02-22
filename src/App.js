@@ -2,24 +2,21 @@ import React, { Component } from 'react';
 import './App.css';
 
 import abc from 'abcjs'
-import { generateNote } from './modules/sequence/NoteGenerator/NoteGenerator'
-import { generateSequence } from './modules/sequence/SequenceGenerator/SequenceGenerator'
-import { combineSequences } from './modules/sequence/SequenceCombiner/SequenceCombiner'
-import AbcInterpreter from './modules/abc_interpreter/Interpreter/Interpreter'
+import { generateNote } from './modules/sequence/NoteGenerator'
+import { generateSequence } from './modules/sequence/SequenceGenerator'
+import interpret from './modules/abc_interpreter/Interpreter'
+import { combineSequences } from './modules/sequence/SequenceCombiner'
 
 class App extends Component {
-
   componentDidMount() {
 
-    const noteGenerator = generateNote(0.8)(['c', 'D'])
+    const noteGenerator = generateNote(1)(['c', 'D'])
     const sequenceGenerator = generateSequence(noteGenerator)(3)
 
-    const s1 = sequenceGenerator(Array(24).fill(0).map(Math.random))
-    const s2 = sequenceGenerator(Array(24).fill(0).map(Math.random))
+    const s1 = sequenceGenerator(Array(12).fill(0).map(Math.random))
+    const sequence = combineSequences([s1])
 
-    const sequence = combineSequences([s1, s2])
-    const interpreter = new AbcInterpreter()
-    this.renderBars(this.compileNoteString(interpreter.interpretSequence(sequence, 3)))
+    this.renderBars(this.compileNoteString(interpret(3, 12, sequence)))
   }
 
   render() {
@@ -30,7 +27,7 @@ class App extends Component {
     )
   }
 
-  compileNoteString = (noteString) => `%%flatbeams 1
+  compileNoteString = noteString => `%%flatbeams 1
         M: 4/4
         K: clef=perc
         V:all stems=up
@@ -43,7 +40,7 @@ class App extends Component {
       {
         scale: 2,
         add_classes: true,
-        staffwidth: 900,
+        staffwidth: 600,
       },
       {},
       {
