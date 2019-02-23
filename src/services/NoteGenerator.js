@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 
 export const generateNote = R.curry((density, range, random) =>
-  random > normalizeDensity(density)
+  random > density
     ? 'z'
     : getByDecimalIndex(range, (random / density))
 )
@@ -15,5 +15,3 @@ export const generateNoteOtherThan = (note, genNote, random, attempts = 10) => {
 }
 
 const getByDecimalIndex = (arr, decimal) => arr[Math.floor(decimal * arr.length)]
-
-const normalizeDensity = density => density ** 2

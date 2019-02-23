@@ -19,28 +19,27 @@ const addNoteValues = group =>
     ? group.replace(/zz$/i, '2').replace(/^zz/i, 'z')
     : group
 
-const processGroup = R.pipe(
-  addTripletBrackets,
-  addTripletEigths,
-  addNoteValues
-)
-
 const addBarSeparators = R.curry((perBar, sequence) => {
-  let matches = sequence.match(new RegExp(`((?:[^ ]+ ){${perBar}})`))
-  return matches
-    ? matches
+  let bars = sequence.match(new RegExp(`((?:[^ ]+ ){${perBar}})`))
+  return bars
+    ? bars
       .reduce((total, current) => total + '| ' + current)
       .trim()
     : sequence
 })
 
-const interpret = (groupLength, groupsPerBar, sequence) => {
-  return R.pipe(
+const interpret = R.curry((groupLength, groupsPerBar, sequence) =>
+  R.pipe(
     toGroups(groupLength),
-    R.map(processGroup),
+    R.map(
+      R.pipe(
+        addTripletBrackets,
+        addTripletEigths,
+        addNoteValues)
+    ),
     R.join(' '),
     addBarSeparators(groupsPerBar)
   )(sequence)
-}
+)
 
 export default interpret
