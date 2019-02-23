@@ -2,7 +2,7 @@ import * as R from 'ramda'
 
 const removeRests = col => R.equals(col, ['z']) ? col : R.without('z', col)
 
-const addBrackets = col => R.length(col) < 2 ? col : R.prepend('[', R.append(']', col))
+const addBrackets = col => R.length(col) === 1 ? col : R.unnest(['['], col, [']'])
 
 const combineSequences = R.pipe(
   R.map(

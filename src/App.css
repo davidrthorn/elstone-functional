@@ -4,3 +4,15 @@
   align-items: center;
   height: 100vh;
 }
+
+button {
+  all: unset;
+  color: #222222;
+  border: 1px solid black;
+  padding: 0.8em 1.5em;
+  text-transform: uppercase;
+}
+
+button:hover {
+  background: #cdd;
+}

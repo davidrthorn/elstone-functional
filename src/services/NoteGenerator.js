@@ -15,3 +15,5 @@ export const generateNoteOtherThan = (note, genNote, random, attempts = 10) => {
 }
 
 const getByDecimalIndex = (arr, decimal) => arr[Math.floor(decimal * arr.length)]
+
+export default generateNote
