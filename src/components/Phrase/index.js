@@ -10,7 +10,7 @@ class Phrase extends Component {
   componentDidMount() {
 
     const sequenceGenerator = generateSequence(
-      generateNote(1)(['c', 'D'])
+      generateNote(0.6)(['c', 'D'])
     )(3)
 
     const s1 = sequenceGenerator(Array(12).fill(0).map(Math.random))
