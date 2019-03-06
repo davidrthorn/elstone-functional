@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import abc from 'abcjs'
-import generateNote, { randoms } from '../../services/NoteGenerator'
-import generateSequence from '../../services/SequenceGenerator'
 import interpret from '../../services/AbcInterpreter'
 
-const Phrase = () => {
-  const [notes, setSeq] = useState(regenerate())
-
+const Phrase = ({ sequence, updateSequence }) => {
+  const notes = interpret(3, 4, sequence)
   useEffect(() => {
     abc.renderAbc(
       'paper',
@@ -23,17 +20,9 @@ const Phrase = () => {
   return (
     <>
       <div id='paper' />
-      <button onClick={() => setSeq(regenerate)}>JA!</button>
+      <button onClick={updateSequence}>JA!</button>
     </>
   )
-}
-
-const regenerate = () => {
-  const noteGen = generateNote(0.6, ['c'])
-  const sequenceGen = generateSequence(noteGen)(3)
-  const sequence = sequenceGen(randoms(24))
-  const interpreted = interpret(3, 4, sequence)
-  return interpreted
 }
 
 // class Phrase extends Component {
