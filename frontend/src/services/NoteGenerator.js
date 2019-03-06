@@ -8,7 +8,7 @@ export const generateNote = R.curry((density, range, random) =>
 
 export const generateNoteOtherThan = (note, genNote, random, attempts = 10) => {
   if (!attempts) return 'z'
-  const newRandom = (random * 10) % 1
+  const newRandom = (random + 1) ** 2 * 10 % 1
   return genNote(newRandom) !== note
     ? genNote(newRandom)
     : generateNoteOtherThan(note, genNote, newRandom, attempts - 1)

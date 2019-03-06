@@ -19,16 +19,15 @@ const addNoteValues = group =>
     ? group.replace(/zz$/i, '2').replace(/^zz/i, 'z')
     : group
 
-const addBarSeparators = R.curry((perBar, sequence) => {
-  let bars = sequence.match(new RegExp(`((?:[^ ]+ ){${perBar}})`))
-  return bars
-    ? bars
-      .reduce((total, current) => total + '| ' + current)
-      .trim()
+const addBarSeparators = sequence => {
+  let groups = sequence.match(new RegExp(`[^ ]+( |$)`, 'gi'))
+  return groups
+    ? groups
+      .reduce((total, current, i) => total + (i % 4 ? '' : '| ') + current)
     : sequence
-})
+}
 
-const interpret = R.curry((groupLength, groupsPerBar, sequence) =>
+const interpret = R.curry((groupLength, sequence) =>
   R.pipe(
     toGroups(groupLength),
     R.map(
@@ -38,7 +37,7 @@ const interpret = R.curry((groupLength, groupsPerBar, sequence) =>
         addNoteValues)
     ),
     R.join(' '),
-    addBarSeparators(groupsPerBar)
+    addBarSeparators
   )(sequence)
 )
 
