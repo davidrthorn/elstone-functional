@@ -10,14 +10,9 @@ const FavouriteButton = () => {
 
 const getShit = async () => {
   const url = process.env.REACT_APP_API_GATEWAY_URL
-  let res = await window.fetch(url)
-  res.json()
-    .then(j => {
-      console.log(j)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+  const res = await window.fetch(url)
+  const data = await res.json()
+  console.log(data.body)
 }
 
 export default FavouriteButton
