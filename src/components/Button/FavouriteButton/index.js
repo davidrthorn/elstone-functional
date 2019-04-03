@@ -3,16 +3,15 @@ import React from 'react'
 const FavouriteButton = () => {
   return (
     <>
-      <button onClick={getShit}>Add to favourites</button>
+      <button onClick={isFavourite}>Add to favourites</button>
     </>
   )
 }
 
-const getShit = async () => {
-  const url = process.env.REACT_APP_API_GATEWAY_URL
+const isFavourite = async () => {
+  const url = process.env.REACT_APP_API_GATEWAY_URL + '/favourite/ccc'
   const res = await window.fetch(url)
-  const data = await res.json()
-  console.log(data.body)
+  console.log(await res.status)
 }
 
 export default FavouriteButton
