@@ -1,17 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const FavouriteButton = () => {
+  const active = useState('active')
+  let color = 'white'
+  Promise.resolve(active).then(data => { color = 'green' })
+
   return (
     <>
-      <button onClick={isFavourite}>Add to favourites</button>
+      <button style={{ backgroundColor: color }}>Add to favourites</button>
     </>
   )
-}
-
-const isFavourite = async () => {
-  const url = process.env.REACT_APP_API_GATEWAY_URL + '/favourite/ccc'
-  const res = await window.fetch(url)
-  console.log(await res.status)
 }
 
 export default FavouriteButton
