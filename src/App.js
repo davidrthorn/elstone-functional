@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import './App.css'
 import Phrase from './components/Phrase/index'
@@ -11,12 +11,19 @@ import generateSequence from './services/SequenceGenerator'
 
 const App = () => {
   const [sequence, newSequence] = useState('c'.repeat(24))
+  const [active, setActive] = useState(false)
+
+  useEffect(async () => {
+      setActive(isFavourite(sequence))
+    }
+  )
+
   return (
     <div className='App'>
       <Phrase
         sequence={sequence}
       />
-      <FavouriteButton active={isFavourite(sequence)}/>
+      <FavouriteButton active={active}/>
       <GenerateButton
         updateSequence={() => {
           newSequence(Generate())

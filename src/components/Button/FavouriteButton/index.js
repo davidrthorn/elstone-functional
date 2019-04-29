@@ -1,13 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-const FavouriteButton = () => {
-  const active = useState('active')
-  let color = 'white'
-  Promise.resolve(active).then(data => { color = 'green' })
-
+const FavouriteButton = ({ active }) => {
   return (
     <>
-      <button style={{ backgroundColor: color }}>Add to favourites</button>
+      <button style={{ backgroundColor: active ? 'green' : 'red' }}>Add to favourites</button>
     </>
   )
 }
