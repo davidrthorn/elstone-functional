@@ -13,9 +13,13 @@ const App = () => {
   const [sequence, newSequence] = useState('c'.repeat(24))
   const [active, setActive] = useState(false)
 
-  useEffect(async () => {
-      setActive(isFavourite(sequence))
-    }
+  const setFavourite = async () => {
+      setActive(await isFavourite(sequence))
+  }
+
+  useEffect(() => {
+      setFavourite()
+    }, []
   )
 
   return (
@@ -23,7 +27,7 @@ const App = () => {
       <Phrase
         sequence={sequence}
       />
-      <FavouriteButton active={active}/>
+      <FavouriteButton active={active} addFavourite={() => {setActive(!active)}}/>
       <GenerateButton
         updateSequence={() => {
           newSequence(Generate())
@@ -45,6 +49,12 @@ const isFavourite = async notes => {
   const res = await window.fetch(url)
   const j = await res.json()
   return j.isFavourite
+}
+
+const addFavourite = notes => async () => {
+  const url = process.env.REACT_APP_API_GATEWAY_URL + '/favourite/' + notes
+  // POST THAT SHIT
+  console.log("I dun posted a favourite")
 }
 
 export default App

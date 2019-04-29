@@ -1,9 +1,12 @@
 import React from 'react'
 
-const FavouriteButton = ({ active }) => {
+const FavouriteButton = ({ active, addFavourite }) => {
   return (
     <>
-      <button style={{ backgroundColor: active ? 'green' : 'red' }}>Add to favourites</button>
+      <button
+        style={{ backgroundColor: active ? 'green' : 'red' }}
+        onClick={addFavourite}
+      >Add to favourites</button>
     </>
   )
 }
